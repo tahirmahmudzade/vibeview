@@ -1,28 +1,43 @@
+import TopTracksSection from "@/components/TopTracksSection";
+import TopArtistsSection from "@/components/TopArtistsSection";
+import ProfileCard from "@/components/ProfileCard";
+import { getUserProfile, getUserTopEntities } from "@/lib/spotify";
 import { auth } from "@/lib/auth";
-import {
-  getUserAlbums,
-  getUserSavedTracks,
-  getUserTopArtists,
-} from "@/lib/spotify";
+// import SubscribeButton from "@/components/SubscribeButton";
+import { DetailedArtist, Track } from "@/types/types";
 
 export default async function Dashboard() {
   const session = await auth();
 
-  if (session) {
-    console.log("Access Token:", session.user.accessToken);
-
-    // Fetch user's top tracks
-    const albums = await getUserAlbums(session.user.accessToken);
-    console.log("Top Tracks:", albums);
-    const savedTracks = await getUserSavedTracks(session.user.accessToken);
-    console.log("Saved Tracks:", savedTracks);
-    const topArtists = await getUserTopArtists(session.user.accessToken);
-    console.log("Top Artists:", topArtists);
+  if (!session) {
+    throw new Error("Unauthorized");
   }
 
+  // console.log("session", session.expires);
+
+  const { accessToken } = session;
+
+  const user = await getUserProfile(accessToken);
+
+  const { items: tracks } = await getUserTopEntities<Track>(
+    "tracks",
+    accessToken
+  );
+
+  const { items: artists } = await getUserTopEntities<DetailedArtist>(
+    "artists",
+    accessToken
+  );
+
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold">Your Top Tracks</h1>
+    <div className="min-h-screen p-6 bg-gradient-to-br from-green-900 via-black to-black text-white font-sans space-y-12">
+      <ProfileCard user={user} />
+
+      <TopTracksSection tracks={tracks} />
+
+      <TopArtistsSection artists={artists} />
+
+      {/* <SubscribeButton /> */}
     </div>
   );
 }
