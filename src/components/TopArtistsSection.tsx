@@ -28,6 +28,8 @@ export default function TopArtistsSection({
       <div
         className="
           grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4
+          sm:max-h-[none] sm:overflow-visible
+          max-h-[700px] overflow-y-auto
         "
       >
         {paginatedArtists.map((artist) => (
@@ -36,7 +38,7 @@ export default function TopArtistsSection({
             className="
               p-4 bg-black/50 rounded-xl shadow-md border border-white/10
               flex flex-col items-center gap-2
-              h-[220px] 
+              h-[220px]
             "
           >
             {/* Artist Image */}
@@ -52,7 +54,6 @@ export default function TopArtistsSection({
 
             {/* Artist Info */}
             <div className="text-center flex-1 flex flex-col justify-center">
-              {/* Artist Name */}
               <h3
                 className="
                   text-sm font-bold text-white leading-snug
@@ -61,8 +62,6 @@ export default function TopArtistsSection({
               >
                 {artist.name}
               </h3>
-
-              {/* Followers */}
               <p className="text-gray-300 text-xs">
                 Followers: {artist.followers.total.toLocaleString()}
               </p>
