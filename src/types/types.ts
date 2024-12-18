@@ -19,7 +19,7 @@ export type UserProfile = {
   href: string;
   id: string;
   images: Image[];
-  product: string;
+  product?: string;
   type: string;
   uri: string;
 };

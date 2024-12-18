@@ -5,7 +5,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     Spotify({
       authorization:
-        "https://accounts.spotify.com/authorize?scope=user-read-email,playlist-read-private,user-library-read,user-top-read",
+        "https://accounts.spotify.com/authorize?scope=user-read-email,playlist-read-private,user-library-read,user-top-read,user-read-private",
     }),
   ],
   callbacks: {
