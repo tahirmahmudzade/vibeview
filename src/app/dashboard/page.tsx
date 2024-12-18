@@ -10,10 +10,8 @@ export default async function Dashboard() {
   const session = await auth();
 
   if (!session) {
-    throw new Error("Unauthorized");
+    throw new Error("No session found");
   }
-
-  // console.log("session", session.expires);
 
   const { accessToken } = session;
 
@@ -32,12 +30,8 @@ export default async function Dashboard() {
   return (
     <div className="min-h-screen p-6 bg-gradient-to-br from-green-900 via-black to-black text-white font-sans space-y-12">
       <ProfileCard user={user} />
-
       <TopTracksSection tracks={tracks} />
-
       <TopArtistsSection artists={artists} />
-
-      {/* <SubscribeButton /> */}
     </div>
   );
 }
