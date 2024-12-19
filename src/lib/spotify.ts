@@ -74,11 +74,12 @@ export async function getUserSavedTracks(access_token: string) {
 
 export async function getUserTopEntities<T>(
   entity: "artists" | "tracks",
-  access_token: string
+  access_token: string,
+  time_range: "short_term" | "medium_term" | "long_term" = "short_term"
 ): Promise<TopEntities<T>> {
   try {
     const response = await fetch(
-      `https://api.spotify.com/v1/me/top/${entity}`,
+      `https://api.spotify.com/v1/me/top/${entity}?time_range=${time_range}`,
       {
         method: "GET",
         headers: {
@@ -90,7 +91,6 @@ export async function getUserTopEntities<T>(
 
     if (!response.ok) {
       console.log("response", response);
-
       throw new Error(`Failed to fetch top ${entity}`);
     }
 

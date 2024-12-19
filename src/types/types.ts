@@ -83,3 +83,5 @@ export type TopEntities<T> = {
   total: number;
   items: T[];
 };
+
+export type Terms = "short_term" | "medium_term" | "long_term";

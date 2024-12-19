@@ -1,4 +1,4 @@
-import { login } from "@/app/actions";
+import { login } from "@/app/actions/auth";
 
 export default function ButtonActions() {
   return (
