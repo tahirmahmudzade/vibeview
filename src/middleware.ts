@@ -1,30 +1,45 @@
+// middleware.ts
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "./lib/auth";
+import { getToken } from "next-auth/jwt";
 
-const protectedRoutes = ["/dashboard"];
+export async function middleware(req: NextRequest) {
+  const token = await getToken({ req, secret: process.env.AUTH_SECRET });
+  const { pathname } = req.nextUrl;
 
-export default async function middleware(req: NextRequest) {
-  const path = req.nextUrl.pathname;
-  const isProtected = protectedRoutes.includes(path);
+  const isOnHome = pathname === "/";
+  const isOnDashboard = pathname.startsWith("/dashboard");
 
-  const session = await auth();
+  // Check token validity
+  const tokenIsValid = token && token.expiresAt && token.expiresAt > Date.now();
 
-  if (path === "/" && session) {
-    return NextResponse.redirect(new URL("/dashboard", req.nextUrl));
-  }
+  if (!tokenIsValid) {
+    // console.log("token is invalid");
 
-  if (isProtected) {
-    if (!session) {
-      return NextResponse.redirect(new URL("/", req.nextUrl));
+    if (isOnDashboard) {
+      // console.log("we are on dashboard, redirecting to home");
+
+      return NextResponse.redirect(new URL("/", req.url));
     }
 
-    const expiresAt = new Date(session.expires).getTime();
-    const now = Date.now();
+    // console.log("we are not on dashboard, let them pass");
 
-    if (now >= expiresAt) {
-      return NextResponse.redirect(new URL("/", req.nextUrl));
+    return NextResponse.next();
+  } else {
+    // console.log("token is valid");
+
+    if (isOnHome) {
+      // console.log("we are on home, redirecting to dashboard");
+
+      return NextResponse.redirect(new URL("/dashboard", req.url));
     }
-  }
 
-  return NextResponse.next();
+    // console.log("we are not on home, let them pass");
+
+    // On dashboard or other pages, let them pass
+    return NextResponse.next();
+  }
 }
+
+export const config = {
+  matcher: ["/((?!api|_next/static|_next/image|.*\\.png$).*)"],
+};
