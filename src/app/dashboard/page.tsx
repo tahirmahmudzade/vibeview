@@ -18,12 +18,14 @@ export default async function Dashboard() {
   const { items: initialTracks } = await getUserTopEntities<Track>(
     "tracks",
     accessToken,
-    "short_term"
+    "short_term",
+    50
   );
   const { items: initialArtists } = await getUserTopEntities<DetailedArtist>(
     "artists",
     accessToken,
-    "short_term"
+    "short_term",
+    50
   );
 
   const user = await getUserProfile(accessToken);

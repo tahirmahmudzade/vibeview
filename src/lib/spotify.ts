@@ -75,11 +75,12 @@ export async function getUserSavedTracks(access_token: string) {
 export async function getUserTopEntities<T>(
   entity: "artists" | "tracks",
   access_token: string,
-  time_range: "short_term" | "medium_term" | "long_term" = "short_term"
+  time_range: "short_term" | "medium_term" | "long_term" = "short_term",
+  limit = 50
 ): Promise<TopEntities<T>> {
   try {
     const response = await fetch(
-      `https://api.spotify.com/v1/me/top/${entity}?time_range=${time_range}`,
+      `https://api.spotify.com/v1/me/top/${entity}?time_range=${time_range}&limit=${limit}`,
       {
         method: "GET",
         headers: {
