@@ -9,6 +9,7 @@ import {
   FaUser,
 } from "react-icons/fa";
 import { BiChevronLeft } from "react-icons/bi";
+import { logout } from "@/app/actions/auth";
 
 interface SidebarProps {
   collapsed: boolean;
@@ -116,20 +117,19 @@ export default function Sidebar({
 
       {/* Bottom Actions */}
       <div className="mt-8 space-y-2">
-        <button
-          onClick={() => {
-            // logout action
-            closeDrawer();
-          }}
-          className={`
+        <form action={logout}>
+          <button
+            type="submit"
+            className={`
             w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium text-white
             bg-red-600 hover:bg-red-700 transition-colors
             ${collapsed ? "justify-center" : ""}
           `}
-        >
-          <FaSignOutAlt className="text-xl" />
-          {!collapsed && "Logout"}
-        </button>
+          >
+            <FaSignOutAlt className="text-xl" />
+            {!collapsed && "Logout"}
+          </button>
+        </form>
         <Link
           href="/settings"
           onClick={closeDrawer}
