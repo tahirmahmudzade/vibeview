@@ -17,6 +17,7 @@ export default function ArtistCard({ artist }: { artist: DetailedArtist }) {
           width={80}
           height={80}
           className="object-cover"
+          onError={(e) => (e.currentTarget.src = "/default-artist.jpg")}
         />
       </div>
       <div className="text-center flex-1 flex flex-col justify-center">

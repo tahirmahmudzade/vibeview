@@ -3,9 +3,9 @@
 import { useState } from "react";
 import { DetailedArtist, Terms } from "@/types/types";
 import PaginationControls from "@/components/PaginationControls";
-import { getTopArtistsAction } from "@/app/actions/getEntities";
 import ArtistCard from "./ArtistCard";
 import TermMenu from "./TermMenu";
+import { getUserTopEntities } from "@/lib/spotify";
 
 interface TopArtistsClientProps {
   initialArtists: DetailedArtist[];
@@ -27,8 +27,12 @@ export default function TopArtistsSection({
   async function handleTermChange(selected: Terms) {
     setTerm(selected);
     setCurrentPage(1);
-    const fetchedArtists = await getTopArtistsAction(accessToken, selected);
-    setArtists(fetchedArtists);
+    const { items: artists } = await getUserTopEntities<DetailedArtist>(
+      "artists",
+      accessToken,
+      selected
+    );
+    setArtists(artists);
   }
 
   return (

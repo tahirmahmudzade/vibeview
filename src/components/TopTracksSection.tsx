@@ -3,9 +3,9 @@
 import { useState } from "react";
 import { Terms, Track } from "@/types/types";
 import PaginationControls from "@/components/PaginationControls";
-import { getTopTracksAction } from "@/app/actions/getEntities";
 import TermMenu from "./TermMenu";
 import TrackCard from "./TrackCard";
+import { getUserTopEntities } from "@/lib/spotify";
 
 interface TopTracksClientProps {
   initialTracks: Track[];
@@ -27,8 +27,12 @@ export default function TopTracksSection({
   async function handleTermChange(selected: Terms) {
     setTerm(selected);
     setCurrentPage(1);
-    const fetchedTracks = await getTopTracksAction(accessToken, selected);
-    setTracks(fetchedTracks);
+    const { items: tracks } = await getUserTopEntities<Track>(
+      "tracks",
+      accessToken,
+      selected
+    );
+    setTracks(tracks);
   }
 
   return (
@@ -39,8 +43,8 @@ export default function TopTracksSection({
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 sm:max-h-[none] sm:overflow-visible max-h-[700px] overflow-y-auto">
-        {paginatedTracks.map((track) => (
-          <TrackCard key={track.id} track={track} />
+        {paginatedTracks.map((track, index) => (
+          <TrackCard key={track.id} track={track} index={startIndex + index} />
         ))}
       </div>
 

@@ -1,14 +1,31 @@
+"use client";
+
 import { formatMilliseconds } from "@/lib/utils";
 import { Track } from "@/types/types";
 import { Card } from "@nextui-org/react";
 import Image from "next/image";
 
-export default function TrackCard({ track }: { track: Track }) {
+export default function TrackCard({
+  track,
+  index,
+}: {
+  track: Track;
+  index: number;
+}) {
   return (
     <Card
       key={track.id}
-      className="p-4 bg-black/50 rounded-xl shadow-md border border-white/10 flex flex-col items-center gap-2 h-[220px]"
+      className="relative p-4 bg-black/50 rounded-xl shadow-md border border-white/10 flex flex-col items-center gap-2 h-[220px]"
     >
+      {/* Track Number */}
+      <span
+        className="absolute top-2 left-2 bg-green-600 text-black font-bold rounded-full shadow
+        text-xs px-1.5 py-0.5 sm:text-sm sm:px-2 sm:py-1"
+      >
+        {index + 1}
+      </span>
+
+      {/* Album Image */}
       <div className="relative w-16 h-16 sm:w-20 sm:h-20 overflow-hidden rounded-full">
         <Image
           src={track.album.images[0]?.url || "/placeholder.png"}
@@ -16,8 +33,11 @@ export default function TrackCard({ track }: { track: Track }) {
           width={80}
           height={80}
           className="object-cover"
+          onError={(e) => (e.currentTarget.src = "/default-track.jpg")}
         />
       </div>
+
+      {/* Track Info */}
       <div className="text-center flex-1 flex flex-col justify-center">
         <h3 className="text-sm font-bold text-white leading-snug line-clamp-2">
           {track.name}
