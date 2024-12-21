@@ -1,11 +1,22 @@
 import NextAuth, { NextAuthConfig } from "next-auth";
 import Spotify from "next-auth/providers/spotify";
 
+const scopes = [
+  "user-read-email",
+  "playlist-read-private",
+  "user-library-read",
+  "user-top-read",
+  "user-read-private",
+  "user-read-currently-playing",
+  "user-read-recently-played",
+];
+
 export const authConfig: NextAuthConfig = {
   providers: [
     Spotify({
-      authorization:
-        "https://accounts.spotify.com/authorize?scope=user-read-email,playlist-read-private,user-library-read,user-top-read,user-read-private",
+      authorization: `https://accounts.spotify.com/authorize?scope=${scopes.join(
+        ","
+      )}`,
     }),
   ],
 

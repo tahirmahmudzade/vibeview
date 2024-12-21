@@ -33,12 +33,12 @@ export default function Sidebar({
       icon: <FaHome className="text-xl" />,
     },
     {
-      name: "Top Tracks",
-      href: "/top-tracks",
+      name: "Tracks",
+      href: "/tracks",
       icon: <FaMusic className="text-xl" />,
     },
     {
-      name: "Top Artists",
+      name: "Artists",
       href: "/top-artists",
       icon: <FaUserFriends className="text-xl" />,
     },
