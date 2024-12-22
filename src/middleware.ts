@@ -9,16 +9,7 @@ export async function middleware(req: NextRequest) {
     secureCookie: process.env.NODE_ENV === "production",
   });
 
-  console.log("Token:", token);
   const { pathname } = req.nextUrl;
-
-  if (pathname === "/dashboard") {
-    if (!token) {
-      console.log("No token found");
-
-      throw Error("No token found");
-    }
-  }
 
   const isOnHome = pathname === "/";
   const isOnProtectedPath = ["/dashboard", "/tracks", "/artists"].some((path) =>
