@@ -7,7 +7,9 @@ export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   const isOnHome = pathname === "/";
-  const isOnDashboard = pathname.startsWith("/dashboard");
+  const isOnProtectedPath = ["/dashboard", "/tracks", "/artists"].some((path) =>
+    pathname.startsWith(path)
+  );
 
   // Check token validity
   const tokenIsValid = token && token.expiresAt && token.expiresAt > Date.now();
@@ -15,7 +17,7 @@ export async function middleware(req: NextRequest) {
   if (!tokenIsValid) {
     // console.log("token is invalid");
 
-    if (isOnDashboard) {
+    if (isOnProtectedPath) {
       // console.log("we are on dashboard, redirecting to home");
 
       return NextResponse.redirect(new URL("/", req.url));

@@ -39,7 +39,7 @@ export default function Sidebar({
     },
     {
       name: "Artists",
-      href: "/top-artists",
+      href: "/artists",
       icon: <FaUserFriends className="text-xl" />,
     },
   ];
