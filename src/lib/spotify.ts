@@ -1,11 +1,11 @@
 import {
-  DetailedArtist,
   RecentlyPlayedTracksResponse,
   Entities,
   UserPlaylistsResponse,
   UserProfile,
   FollowedArtistsResponse,
   UserSavedAlbumsResponse,
+  SavedTrack,
 } from "@/types/types";
 
 export async function getUserProfile(
@@ -58,7 +58,9 @@ export async function getUserAlbums(
   }
 }
 
-export async function getUserSavedTracks(access_token: string) {
+export async function getUserSavedTracks(
+  access_token: string
+): Promise<SavedTrack[]> {
   try {
     const response = await fetch("https://api.spotify.com/v1/me/tracks", {
       method: "GET",
@@ -78,7 +80,7 @@ export async function getUserSavedTracks(access_token: string) {
     return data.items; // List of top tracks
   } catch (error) {
     console.error("Error fetching top tracks:", error);
-    return [];
+    throw new Error("Error fetching user saved tracks");
   }
 }
 
@@ -109,7 +111,7 @@ export async function getUserTopEntities<T>(
     return data;
   } catch (error) {
     console.error(`Error fetching top ${entity}:`, error);
-    throw error;
+    throw new Error(`Error fetching top ${entity}`);
   }
 }
 
@@ -138,7 +140,7 @@ export async function getRecentlyPlayedTracks(
     return data;
   } catch (error) {
     console.error("Error fetching top tracks:", error);
-    throw error;
+    throw new Error("Error fetching recently played tracks");
   }
 }
 
@@ -164,7 +166,7 @@ export async function getUserPlaylists(
     return data;
   } catch (error) {
     console.error("Error fetching top tracks:", error);
-    throw error;
+    throw new Error("Error fetching user playlists");
   }
 }
 
@@ -193,6 +195,6 @@ export async function getFollowedArtists(
     return data.artists;
   } catch (error) {
     console.error("Error fetching top tracks:", error);
-    throw error;
+    throw new Error("Error fetching followed artists");
   }
 }
