@@ -43,8 +43,12 @@ export default function TopArtistsSection({
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 sm:max-h-[none] sm:overflow-visible max-h-[700px] overflow-y-auto">
-        {paginatedArtists.map((artist) => (
-          <ArtistCard key={artist.id} artist={artist} />
+        {paginatedArtists.map((artist, index) => (
+          <ArtistCard
+            key={artist.id}
+            artist={artist}
+            index={startIndex + index}
+          />
         ))}
       </div>
 
