@@ -1,4 +1,3 @@
-// app/dashboard/page.tsx
 import { auth } from "@/lib/auth";
 import { getUserProfile, getUserTopEntities } from "@/lib/spotify";
 import ProfileCard from "@/components/ProfileCard";
