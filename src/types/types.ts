@@ -255,3 +255,18 @@ export type UserSavedAlbumsResponse = {
   total: number; // Total number of saved albums
   items: SavedAlbum[]; // List of saved albums
 };
+
+export type SavedTrack = {
+  added_at: string; // When the track was saved
+  track: Track; // Reuse the existing Track type
+};
+
+export type UserSavedTracksResponse = {
+  href: string; // API endpoint
+  limit: number; // Number of items per page
+  next: string | null; // URL for the next page
+  offset: number; // Offset for pagination
+  previous: string | null; // URL for the previous page
+  total: number; // Total number of saved tracks
+  items: SavedTrack[]; // List of saved tracks
+};
