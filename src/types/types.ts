@@ -4,7 +4,7 @@ type Image = {
   width: number;
 };
 
-type Artist = Omit<
+export type Artist = Omit<
   DetailedArtist,
   "popularity" | "images" | " genres" | "followers"
 >;
@@ -42,7 +42,7 @@ export type Album = {
 
 export type DetailedArtist = {
   external_urls: { spotify: string };
-  followers: { href: string; total: number };
+  followers: { href: string | null; total: number };
   genres: string[];
   href: string;
   id: string;
@@ -162,14 +162,12 @@ export type UserPlaylistsResponse = {
 };
 
 export type FollowedArtistsResponse = {
-  artists: {
-    href: string; // URL for the API request
-    limit: number; // Number of items per page
-    next: string | null; // URL for the next page
-    cursors: PaginationCursors; // Cursors for pagination
-    total: number; // Total number of followed artists
-    items: DetailedArtist[]; // Array of followed artists
-  };
+  href: string; // URL for the API request
+  limit: number; // Number of items per page
+  next: string | null; // URL for the next page
+  cursors: PaginationCursors; // Cursors for pagination
+  total: number; // Total number of followed artists
+  items: DetailedArtist[]; // Array of followed artists
 };
 
 export type AlbumCopyright = {

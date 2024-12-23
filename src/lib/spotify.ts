@@ -188,13 +188,13 @@ export async function getFollowedArtists(
     if (!response.ok) {
       console.log("response", response);
 
-      throw new Error("Failed to fetch top tracks");
+      throw new Error("Failed to fetch followed artists");
     }
 
     const data = await response.json();
     return data.artists;
   } catch (error) {
-    console.error("Error fetching top tracks:", error);
+    console.error("Error fetching followed artists:", error);
     throw new Error("Error fetching followed artists");
   }
 }
