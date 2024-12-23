@@ -1,6 +1,8 @@
 // middleware.ts
 import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
+import { auth } from "./lib/auth";
+import { logout } from "./app/actions/auth";
 
 export async function middleware(req: NextRequest) {
   const token = await getToken({
@@ -9,6 +11,8 @@ export async function middleware(req: NextRequest) {
     secureCookie: process.env.NODE_ENV === "production",
   });
 
+  const session = await auth();
+
   const { pathname } = req.nextUrl;
 
   const isOnHome = pathname === "/";
@@ -16,33 +20,23 @@ export async function middleware(req: NextRequest) {
     pathname.startsWith(path)
   );
 
-  // Check token validity
   const tokenIsValid = token && token.expiresAt && token.expiresAt > Date.now();
 
   if (!tokenIsValid) {
-    // console.log("token is invalid");
+    if (session?.user) {
+      await logout();
+    }
 
     if (isOnProtectedPath) {
-      // console.log("we are on dashboard, redirecting to home");
-
       return NextResponse.redirect(new URL("/", req.url));
     }
 
-    // console.log("we are not on dashboard, let them pass");
-
     return NextResponse.next();
   } else {
-    // console.log("token is valid");
-
     if (isOnHome) {
-      // console.log("we are on home, redirecting to dashboard");
-
       return NextResponse.redirect(new URL("/dashboard", req.url));
     }
 
-    // console.log("we are not on home, let them pass");
-
-    // On dashboard or other pages, let them pass
     return NextResponse.next();
   }
 }
