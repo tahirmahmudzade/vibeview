@@ -3,28 +3,35 @@
 import { useState } from "react";
 import { FaBars } from "react-icons/fa";
 import Sidebar from "@/components/Sidebar";
+import { User } from "next-auth";
 
-export default function AppShell({ children }: { children: React.ReactNode }) {
+export default function AppShell({
+  children,
+  user,
+}: {
+  children: React.ReactNode;
+  user?: User;
+}) {
   const [collapsed, setCollapsed] = useState(false); // For large screens
   const [drawerOpen, setDrawerOpen] = useState(false); // For small screens
 
   return (
     <div className="flex h-full min-h-screen bg-black">
-      {/* Sidebar */}
       <Sidebar
         collapsed={collapsed}
         setCollapsed={setCollapsed}
         isDrawerOpen={drawerOpen}
         closeDrawer={() => setDrawerOpen(false)}
+        user={user}
       />
 
       <div className="flex-1 flex flex-col">
-        {/* Header / Top Bar (Small Screens) */}
+        {/* Header */}
         <header
           className="
-          flex items-center text-white px-4 py-3 md:hidden
-          bg-gradient-to-r from-black via-[#0C1F11] to-green-900
-        "
+    flex items-center text-white px-6 py-4 md:hidden
+    bg-gradient-to-br from-green-800 to-black shadow-lg
+  "
         >
           <button
             onClick={() => setDrawerOpen(true)}
@@ -32,13 +39,14 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           >
             <FaBars />
           </button>
-          <h1 className="ml-4 text-lg font-semibold">VibeView</h1>
+          <h1 className="ml-4 text-lg font-bold tracking-tight">VibeView</h1>
         </header>
 
+        {/* Main Content */}
         <main
           className="
-          flex-1 p-6 
-          bg-gradient-to-br from-green-900 via-black to-black 
+          flex-1 
+          bg-gradient-to-br from-green-900 via-black to-black
           text-white font-sans space-y-12 
           overflow-auto
           min-h-screen
@@ -48,7 +56,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         </main>
       </div>
 
-      {/* Backdrop for small screen drawer */}
+      {/* Drawer Overlay */}
       {drawerOpen && (
         <div
           className="fixed inset-0 bg-black/60 z-40 md:hidden"

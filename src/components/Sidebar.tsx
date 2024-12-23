@@ -4,18 +4,19 @@ import {
   FaHome,
   FaMusic,
   FaUserFriends,
-  FaCogs,
   FaSignOutAlt,
   FaUser,
 } from "react-icons/fa";
 import { BiChevronLeft } from "react-icons/bi";
 import { logout } from "@/app/actions/auth";
+import { User } from "next-auth";
 
 interface SidebarProps {
   collapsed: boolean;
   setCollapsed: (val: boolean) => void;
   isDrawerOpen: boolean;
   closeDrawer: () => void;
+  user?: User;
 }
 
 export default function Sidebar({
@@ -23,6 +24,7 @@ export default function Sidebar({
   setCollapsed,
   isDrawerOpen,
   closeDrawer,
+  user,
 }: SidebarProps) {
   const pathname = usePathname();
 
@@ -57,23 +59,24 @@ export default function Sidebar({
         }
       `}
     >
-      {/* Top Section */}
       <div className="flex items-center justify-between mb-8">
         {!collapsed && (
           <div className="flex items-center gap-3">
-            {/* Profile Image or Placeholder */}
             <div className="w-10 h-10 rounded-full border-2 border-green-600 overflow-hidden flex items-center justify-center bg-black/30">
-              {/* If you have user image logic: <img src={userImageUrl || '/placeholder.png'} .../> */}
-              {/* For now, just a placeholder icon if no image */}
               <FaUser className="text-gray-300 text-2xl" />
             </div>
-            <div className="flex flex-col">
-              <span className="text-sm font-bold text-green-100">Username</span>
-              <span className="text-xs text-gray-400">user@example.com</span>
-            </div>
+            {user ? (
+              <div className="flex flex-col">
+                <span className="text-sm font-bold text-green-100">
+                  {user.name}
+                </span>
+                <span className="text-xs text-gray-400">{user.email}</span>
+              </div>
+            ) : (
+              ""
+            )}
           </div>
         )}
-        {/* Collapse Button (medium+ screens) */}
         <button
           onClick={() => setCollapsed(!collapsed)}
           className="hidden md:block p-1 rounded hover:bg-black/30 transition-colors"
@@ -86,7 +89,6 @@ export default function Sidebar({
         </button>
       </div>
 
-      {/* Navigation */}
       <nav className="flex-1">
         <ul className="space-y-2">
           {navItems.map((item) => {
@@ -115,7 +117,6 @@ export default function Sidebar({
         </ul>
       </nav>
 
-      {/* Bottom Actions */}
       <div className="mt-8 space-y-2">
         <form action={logout}>
           <button
@@ -130,7 +131,7 @@ export default function Sidebar({
             {!collapsed && "Logout"}
           </button>
         </form>
-        <Link
+        {/* <Link
           href="/settings"
           onClick={closeDrawer}
           className={`
@@ -140,7 +141,7 @@ export default function Sidebar({
         >
           <FaCogs className="text-xl" />
           {!collapsed && "Settings"}
-        </Link>
+        </Link> */}
       </div>
     </aside>
   );
