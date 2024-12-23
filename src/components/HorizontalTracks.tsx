@@ -5,13 +5,15 @@ import { Card } from "@nextui-org/react";
 import Image from "next/image";
 import { formatMilliseconds } from "@/lib/utils";
 
+interface HorizontalTracksProps {
+  title: string;
+  tracks: { track: Track }[];
+}
+
 export default function HorizontalTracks({
   title,
   tracks,
-}: {
-  title: string;
-  tracks: { track: Track }[];
-}) {
+}: HorizontalTracksProps) {
   return (
     <div className="w-full">
       <h2 className="text-xl font-semibold tracking-tight mb-4">{title}</h2>
