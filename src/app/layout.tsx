@@ -15,10 +15,16 @@ export default async function RootLayout({
 }) {
   const session = await auth();
 
+  const sessionExpiresTimestamp =
+    session && new Date(session.expires).getTime();
+
+  const shouldShowAppShell =
+    sessionExpiresTimestamp && sessionExpiresTimestamp > Date.now();
+
   return (
     <html className="h-full dark" lang="en">
       <body className="h-full">
-        {session?.user ? (
+        {shouldShowAppShell ? (
           <AppShell user={session.user}>{children}</AppShell>
         ) : (
           children

@@ -1,8 +1,6 @@
 // middleware.ts
 import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
-import { auth } from "./lib/auth";
-import { logout } from "./app/actions/auth";
 
 export async function middleware(req: NextRequest) {
   const token = await getToken({
@@ -11,8 +9,6 @@ export async function middleware(req: NextRequest) {
     secureCookie: process.env.NODE_ENV === "production",
   });
 
-  const session = await auth();
-
   const { pathname } = req.nextUrl;
 
   const isOnHome = pathname === "/";
@@ -20,13 +16,9 @@ export async function middleware(req: NextRequest) {
     pathname.startsWith(path)
   );
 
-  const tokenIsValid = token && token.expiresAt && token.expiresAt > Date.now();
+  const tokenIsValid = token?.expiresAt && token.expiresAt > Date.now();
 
   if (!tokenIsValid) {
-    if (session?.user) {
-      await logout();
-    }
-
     if (isOnProtectedPath) {
       return NextResponse.redirect(new URL("/", req.url));
     }
