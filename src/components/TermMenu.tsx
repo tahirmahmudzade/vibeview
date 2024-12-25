@@ -3,13 +3,12 @@
 import { Terms } from "@/types/types";
 import { Select, SelectItem } from "@nextui-org/react";
 
-export default function TermMenu({
-  handleTermChange,
-  term,
-}: {
+interface TermMenuProps {
   handleTermChange: (term: Terms) => void;
   term: Terms;
-}) {
+}
+
+export default function TermMenu({ handleTermChange, term }: TermMenuProps) {
   return (
     <Select
       className="ml-auto w-36 md:w-40 lg:w-48"

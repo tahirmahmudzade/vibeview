@@ -3,7 +3,9 @@
 import { DetailedArtist } from "@/types/types";
 import { Card, Image } from "@nextui-org/react";
 
-type ArtistCardProps = { artist: DetailedArtist };
+interface ArtistCardProps {
+  artist: DetailedArtist;
+}
 
 export default function NewArtistCard({ artist }: ArtistCardProps) {
   const imageUrl =

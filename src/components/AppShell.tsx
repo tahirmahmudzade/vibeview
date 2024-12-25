@@ -5,13 +5,12 @@ import { FaBars } from "react-icons/fa";
 import Sidebar from "@/components/Sidebar";
 import { User } from "next-auth";
 
-export default function AppShell({
-  children,
-  user,
-}: {
+interface AppShellProps {
   children: React.ReactNode;
   user?: User;
-}) {
+}
+
+export default function AppShell({ children, user }: AppShellProps) {
   const [collapsed, setCollapsed] = useState(false); // For large screens
   const [drawerOpen, setDrawerOpen] = useState(false); // For small screens
 
