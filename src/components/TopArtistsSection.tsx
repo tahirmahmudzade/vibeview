@@ -42,7 +42,19 @@ export default function TopArtistsSection({
         <TermMenu handleTermChange={handleTermChange} term={term} />
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 sm:max-h-[none] sm:overflow-visible max-h-[700px] overflow-y-auto">
+      <div
+        className="
+      grid 
+      sm:grid-cols-3 md:grid-cols-5 gap-4 
+      sm:max-h-[none] sm:overflow-visible 
+      max-h-[460px] overflow-x-auto scroll-smooth scrollbar-hide
+      grid-flow-col auto-cols-[calc(50%-8px)] 
+      sm:grid-flow-row sm:auto-cols-[unset]
+    "
+        style={{
+          gridTemplateRows: "repeat(2, minmax(0, 1fr))",
+        }}
+      >
         {paginatedArtists.map((artist, index) => (
           <ArtistCard
             key={artist.id}
