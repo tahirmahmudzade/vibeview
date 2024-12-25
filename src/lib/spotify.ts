@@ -145,24 +145,29 @@ export async function getRecentlyPlayedTracks(
 }
 
 export async function getUserPlaylists(
-  access_token: string
+  access_token: string,
+  limit = 50
 ): Promise<UserPlaylistsResponse> {
   try {
-    const response = await fetch("https://api.spotify.com/v1/me/playlists", {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${access_token}`,
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch(
+      `https://api.spotify.com/v1/me/playlists?limit=${limit}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     if (!response.ok) {
       console.log("response", response);
 
-      throw new Error("Failed to fetch top tracks");
+      throw new Error("Failed to fetch user playlists");
     }
 
     const data = await response.json();
+
     return data;
   } catch (error) {
     console.error("Error fetching top tracks:", error);

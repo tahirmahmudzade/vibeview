@@ -1,5 +1,9 @@
 import { auth } from "@/lib/auth";
-import { getUserProfile, getUserTopEntities } from "@/lib/spotify";
+import {
+  getUserPlaylists,
+  getUserProfile,
+  getUserTopEntities,
+} from "@/lib/spotify";
 import ProfileCard from "@/components/ProfileCard";
 import { DetailedArtist, Track } from "@/types/types";
 import { Suspense } from "react";
@@ -7,6 +11,7 @@ import ProfileSkeleton from "@/components/ProfileSkeletion";
 import SectionSkeleton from "@/components/SectionSkeleton";
 import TopArtistsSection from "@/components/TopArtistsSection";
 import TopTracksSection from "@/components/TopTracksSection";
+import PlaylistsSection from "@/components/PlaylistsSection";
 
 export default async function Dashboard() {
   const session = await auth();
@@ -27,6 +32,8 @@ export default async function Dashboard() {
     50
   );
 
+  const { items: playlists } = await getUserPlaylists(accessToken, 50);
+
   const user = await getUserProfile(accessToken);
 
   return (
@@ -45,6 +52,10 @@ export default async function Dashboard() {
           initialArtists={initialArtists}
           accessToken={accessToken}
         />
+      </Suspense>
+
+      <Suspense fallback={<SectionSkeleton title="Public Playlists" />}>
+        <PlaylistsSection playlists={playlists} />
       </Suspense>
     </div>
   );
