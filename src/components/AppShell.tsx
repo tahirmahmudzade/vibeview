@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaBars } from "react-icons/fa";
 import Sidebar from "@/components/Sidebar";
 import { User } from "next-auth";
@@ -13,6 +13,22 @@ interface AppShellProps {
 export default function AppShell({ children, user }: AppShellProps) {
   const [collapsed, setCollapsed] = useState(false); // For large screens
   const [drawerOpen, setDrawerOpen] = useState(false); // For small screens
+
+  useEffect(() => {
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker
+        .register("/sw.js")
+        .then((registration) => {
+          console.log(
+            "Service Worker registered with scope:",
+            registration.scope
+          );
+        })
+        .catch((error) => {
+          console.error("Service Worker registration failed:", error);
+        });
+    }
+  }, []);
 
   return (
     <div className="flex h-full min-h-screen bg-black">

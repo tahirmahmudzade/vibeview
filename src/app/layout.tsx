@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import AppShell from "@/components/AppShell";
 import { auth } from "@/lib/auth";
+import RootLayoutClient from "@/components/RootLayoutClient";
 
 export const metadata: Metadata = {
   title: "VibeView",
@@ -24,11 +24,12 @@ export default async function RootLayout({
   return (
     <html className="h-full dark" lang="en">
       <body className="h-full">
-        {shouldShowAppShell ? (
-          <AppShell user={session.user}>{children}</AppShell>
-        ) : (
-          children
-        )}
+        <RootLayoutClient
+          shouldShowAppShell={shouldShowAppShell}
+          user={session?.user}
+        >
+          {children}
+        </RootLayoutClient>
       </body>
     </html>
   );
