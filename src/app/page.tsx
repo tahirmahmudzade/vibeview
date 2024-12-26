@@ -5,7 +5,6 @@ import HeroImage from "@/components/HeroImage";
 import InstallAlert from "@/components/InstallAlert";
 
 export default function Home() {
-export default function Home() {
   return (
     <div className="relative h-screen flex flex-col lg:flex-row bg-gradient-to-r from-green-800 via-green-900 to-black overflow-hidden">
       {/* Install Alert */}
