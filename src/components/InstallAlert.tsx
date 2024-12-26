@@ -3,15 +3,24 @@
 import { useEffect, useState } from "react";
 import { Alert, Button } from "@nextui-org/react";
 
+// Define the BeforeInstallPromptEvent interface
+interface BeforeInstallPromptEvent extends Event {
+  prompt: () => Promise<void>;
+  userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
+}
+
 export default function InstallAlertClient() {
-  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [deferredPrompt, setDeferredPrompt] =
+    useState<BeforeInstallPromptEvent | null>(null);
   const [showInstallAlert, setShowInstallAlert] = useState(false); // Alert visibility state
   const [isVisible, setIsVisible] = useState(false); // For transitions
 
   useEffect(() => {
-    const handleBeforeInstallPrompt = (event: any) => {
-      event.preventDefault(); // Prevent the default mini-infobar from appearing
-      setDeferredPrompt(event); // Save the event for triggering later
+    const handleBeforeInstallPrompt = (event: Event) => {
+      // Cast the event as BeforeInstallPromptEvent
+      const beforeInstallEvent = event as BeforeInstallPromptEvent;
+      beforeInstallEvent.preventDefault(); // Prevent the default mini-infobar from appearing
+      setDeferredPrompt(beforeInstallEvent); // Save the event for triggering later
 
       // Show the alert with a delay for smooth appearance
       setShowInstallAlert(true);
@@ -33,12 +42,16 @@ export default function InstallAlertClient() {
       };
     };
 
-    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+    // Add the event listener with casting
+    window.addEventListener(
+      "beforeinstallprompt",
+      handleBeforeInstallPrompt as EventListener
+    );
 
     return () => {
       window.removeEventListener(
         "beforeinstallprompt",
-        handleBeforeInstallPrompt
+        handleBeforeInstallPrompt as EventListener
       );
     };
   }, []);
@@ -46,7 +59,7 @@ export default function InstallAlertClient() {
   const handleInstallClick = () => {
     if (deferredPrompt) {
       deferredPrompt.prompt();
-      deferredPrompt.userChoice.then((choiceResult: any) => {
+      deferredPrompt.userChoice.then(() => {
         setDeferredPrompt(null);
         setIsVisible(false);
         setTimeout(() => setShowInstallAlert(false), 500);
