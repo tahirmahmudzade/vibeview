@@ -108,3 +108,53 @@ VibeView is a Progressive Web Application (PWA) built with Next.js that allows S
    • Fully branded with icons (192x192, 512x512).
 2. Standalone Mode:
    • VibeView runs like a native app without browser UI.
+
+## Tech Stack 🖥️
+
+• Dev: Next.js
+• Authentication: Auth.js (Spotify OAuth)
+• Spotify API: Spotify Web API
+• PWA Support: Service Workers and Web App Manifest
+
+## Roadmap 🚀
+
+• Add more detailed user analytics (e.g., genres, playlists).
+• Implement social sharing features for stats.
+• Add light mode support.
+
+## Contributing 🤝
+
+Contributions are welcome! Follow these steps to contribute:
+
+1. Fork the repository.
+2. Create a feature branch:
+
+```bash
+   git checkout -b feature-name
+```
+
+3. Commit your changes:
+
+```bash
+   git commit -m "Add your message here"
+```
+
+4. Push to the branch:
+
+```bash
+   git push origin feature-name
+```
+
+5. Open a Pull Request.
+
+## License 📝
+
+This project is licensed under the MIT License. See the LICENSE file for details.
+
+## Contact 📧
+
+If you have any questions or feedback, feel free to reach out:
+
+• Email: tahirmahmudzade25@gmail.com
+
+Enjoy exploring your Spotify stats with VibeView! 🎶
