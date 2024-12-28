@@ -15,7 +15,6 @@ VibeView is a Progressive Web Application (PWA) built with Next.js that allows S
 ### 📱 Progressive Web App (PWA)
 
 - Fully installable on mobile and desktop devices.
-<!-- - Offline functionality with seamless transitions between pages. -->
 - Native app-like experience with **standalone display mode**.
 
 ### 🌟 Modern UI
@@ -29,7 +28,7 @@ VibeView is a Progressive Web Application (PWA) built with Next.js that allows S
 - **Next.js** for server-side rendering and optimized performance.
 - **Spotify Web API** for fetching user data.
 - **Auth.js** for Spotify authentication.
-- **PWA support** to make the app installable and offline-capable.
+- **PWA support** to make the app installable.
 
 ---
 
