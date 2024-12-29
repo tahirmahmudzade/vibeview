@@ -2,14 +2,16 @@ import NextAuth, { NextAuthConfig } from "next-auth";
 import Spotify from "next-auth/providers/spotify";
 
 const scopes = [
-  "user-read-email",
-  "user-read-recently-played",
-  "user-follow-read",
+  "user-modify-playback-state",
   "playlist-read-private",
+  "user-follow-read",
   "user-library-read",
   "user-top-read",
+  "user-read-email",
   "user-read-private",
+  "user-read-recently-played",
   "user-read-currently-playing",
+  "user-read-playback-state",
 ];
 
 export const authConfig: NextAuthConfig = {

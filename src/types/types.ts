@@ -268,3 +268,45 @@ export type UserSavedTracksResponse = {
   total: number; // Total number of saved tracks
   items: SavedTrack[]; // List of saved tracks
 };
+
+export type Device = {
+  id: string;
+  is_active: boolean;
+  is_private_session: boolean;
+  is_restricted: boolean;
+  name: string;
+  type: string;
+  volume_percent: number;
+  supports_volume: boolean;
+};
+
+export type Context = {
+  type: string;
+  href: string | null;
+  external_urls: { spotify: string };
+  uri: string;
+};
+
+export type Actions = {
+  disallows: {
+    resuming?: boolean;
+    pausing?: boolean;
+    seeking?: boolean;
+    skipping_next?: boolean;
+    skipping_prev?: boolean;
+    toggling_repeat_context?: boolean;
+    toggling_shuffle?: boolean;
+    toggling_repeat_track?: boolean;
+    transferring_playback?: boolean;
+  };
+};
+
+export type CurrentlyPlayingTrackResponse = {
+  timestamp: number;
+  context?: Context;
+  progress_ms: number | null;
+  is_playing: boolean;
+  currently_playing_type: string;
+  item: Track | null;
+  actions: Actions;
+};

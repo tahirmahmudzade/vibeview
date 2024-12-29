@@ -6,29 +6,41 @@ import {
   FollowedArtistsResponse,
   UserSavedAlbumsResponse,
   SavedTrack,
+  CurrentlyPlayingTrackResponse,
+  Device,
 } from "@/types/types";
+
+const BASE_URL = "https://api.spotify.com/v1/";
+
+async function spotifyFetch<T>(
+  endpoint: string,
+  accessToken: string,
+  options: RequestInit = {}
+): Promise<T> {
+  const response = await fetch(`${BASE_URL}${endpoint}`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json",
+    },
+    ...options,
+  });
+
+  if (!response.ok) {
+    console.log("Response", response);
+    throw new Error(`Failed to fetch from endpoint: ${endpoint}`);
+  }
+
+  return await response.json();
+}
 
 export async function getUserProfile(
   accessToken: string
 ): Promise<UserProfile> {
   try {
-    const response = await fetch("https://api.spotify.com/v1/me", {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error("Failed to fetch user profile");
-    }
-
-    const data = await response.json();
-    return data;
+    return await spotifyFetch<UserProfile>("me", accessToken);
   } catch (error) {
-    console.error("Error fetching user profile:", error);
-    throw new Error("Error fetching user profile");
+    console.error("Error in getUserProfile", error);
+    throw error; // Modify this if you want custom error handling
   }
 }
 
@@ -36,170 +48,182 @@ export async function getUserAlbums(
   accessToken: string
 ): Promise<UserSavedAlbumsResponse> {
   try {
-    const response = await fetch("https://api.spotify.com/v1/me/albums", {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!response.ok) {
-      console.log("response", response);
-
-      throw new Error("Failed to fetch top tracks");
-    }
-
-    const data = await response.json();
-    return data; // List of top tracks
+    return await spotifyFetch<UserSavedAlbumsResponse>(
+      "me/albums",
+      accessToken
+    );
   } catch (error) {
-    console.error("Error fetching top tracks:", error);
-    throw new Error("Error fetching user albums");
+    console.error("Error in getUserAlbums", error);
+    throw error;
   }
 }
 
 export async function getUserSavedTracks(
-  access_token: string
+  accessToken: string
 ): Promise<SavedTrack[]> {
   try {
-    const response = await fetch("https://api.spotify.com/v1/me/tracks", {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${access_token}`,
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!response.ok) {
-      console.log("response", response);
-
-      throw new Error("Failed to fetch top tracks");
-    }
-
-    const data = await response.json();
-    return data.items; // List of top tracks
+    const data = await spotifyFetch<{ items: SavedTrack[] }>(
+      "me/tracks",
+      accessToken
+    );
+    return data.items;
   } catch (error) {
-    console.error("Error fetching top tracks:", error);
-    throw new Error("Error fetching user saved tracks");
+    console.error("Error in getUserSavedTracks", error);
+    throw error;
   }
 }
 
 export async function getUserTopEntities<T>(
   entity: "artists" | "tracks",
-  access_token: string,
-  time_range: "short_term" | "medium_term" | "long_term" = "short_term",
+  accessToken: string,
+  timeRange: "short_term" | "medium_term" | "long_term" = "short_term",
   limit = 50
 ): Promise<Entities<T>> {
   try {
-    const response = await fetch(
-      `https://api.spotify.com/v1/me/top/${entity}?time_range=${time_range}&limit=${limit}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${access_token}`,
-          "Content-Type": "application/json",
-        },
-      }
+    return await spotifyFetch<Entities<T>>(
+      `me/top/${entity}?time_range=${timeRange}&limit=${limit}`,
+      accessToken
     );
-
-    if (!response.ok) {
-      console.log("response", response);
-      throw new Error(`Failed to fetch top ${entity}`);
-    }
-
-    const data = await response.json();
-    return data;
   } catch (error) {
-    console.error(`Error fetching top ${entity}:`, error);
-    throw new Error(`Error fetching top ${entity}`);
+    console.error(`Error in getUserTopEntities (${entity})`, error);
+    throw error;
   }
 }
 
 export async function getRecentlyPlayedTracks(
-  access_token: string
+  accessToken: string
 ): Promise<RecentlyPlayedTracksResponse> {
   try {
-    const response = await fetch(
-      "https://api.spotify.com/v1/me/player/recently-played",
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${access_token}`,
-          "Content-Type": "application/json",
-        },
-      }
+    return await spotifyFetch<RecentlyPlayedTracksResponse>(
+      "me/player/recently-played",
+      accessToken
     );
-
-    if (!response.ok) {
-      console.log("response", response);
-
-      throw new Error("Failed to fetch top tracks");
-    }
-
-    const data = await response.json();
-    return data;
   } catch (error) {
-    console.error("Error fetching top tracks:", error);
-    throw new Error("Error fetching recently played tracks");
+    console.error("Error in getRecentlyPlayedTracks", error);
+    throw error;
   }
 }
 
 export async function getUserPlaylists(
-  access_token: string,
+  accessToken: string,
   limit = 50
 ): Promise<UserPlaylistsResponse> {
   try {
-    const response = await fetch(
-      `https://api.spotify.com/v1/me/playlists?limit=${limit}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${access_token}`,
-          "Content-Type": "application/json",
-        },
-      }
+    return await spotifyFetch<UserPlaylistsResponse>(
+      `me/playlists?limit=${limit}`,
+      accessToken
     );
-
-    if (!response.ok) {
-      console.log("response", response);
-
-      throw new Error("Failed to fetch user playlists");
-    }
-
-    const data = await response.json();
-
-    return data;
   } catch (error) {
-    console.error("Error fetching top tracks:", error);
-    throw new Error("Error fetching user playlists");
+    console.error("Error in getUserPlaylists", error);
+    throw error;
   }
 }
 
 export async function getFollowedArtists(
-  access_token: string
+  accessToken: string
 ): Promise<FollowedArtistsResponse> {
   try {
-    const response = await fetch(
-      "https://api.spotify.com/v1/me/following?type=artist",
+    const data = await spotifyFetch<{ artists: FollowedArtistsResponse }>(
+      "me/following?type=artist",
+      accessToken
+    );
+    return data.artists;
+  } catch (error) {
+    console.error("Error in getFollowedArtists", error);
+    throw error;
+  }
+}
+
+export async function getCurrentlyPlayingTrack(
+  accessToken: string
+): Promise<CurrentlyPlayingTrackResponse | null> {
+  try {
+    return await spotifyFetch<CurrentlyPlayingTrackResponse>(
+      "me/player/currently-playing",
+      accessToken
+    );
+  } catch (error) {
+    console.log("No track currently playing", error);
+
+    return null;
+  }
+}
+
+export async function startResumePlayback(
+  accessToken: string,
+  deviceId: string,
+  uris: string[]
+): Promise<void> {
+  try {
+    await spotifyFetch<void>(
+      `me/player/play?device_id=${deviceId}`,
+      accessToken,
       {
-        method: "GET",
+        method: "PUT",
+        body: JSON.stringify({ uris }),
+      }
+    );
+  } catch (error) {
+    console.error("Error in startResumePlayback", error);
+    throw error;
+  }
+}
+
+export async function skipToNext(
+  accessToken: string,
+  deviceId: string
+): Promise<void> {
+  try {
+    await spotifyFetch<void>(
+      `me/player/next?device_id=${deviceId}`,
+      accessToken,
+      {
+        method: "POST",
+      }
+    );
+  } catch (error) {
+    console.error("Error in skipToNext", error);
+  }
+}
+
+export async function skipToPrevious(
+  accessToken: string,
+  deviceId: string
+): Promise<void> {
+  try {
+    await spotifyFetch<void>(
+      `me/player/previous?device_id=${deviceId}`,
+      accessToken,
+      {
+        method: "POST",
         headers: {
-          Authorization: `Bearer ${access_token}`,
-          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*", // This is a CORS header
         },
       }
     );
-
-    if (!response.ok) {
-      console.log("response", response);
-
-      throw new Error("Failed to fetch followed artists");
-    }
-
-    const data = await response.json();
-    return data.artists;
   } catch (error) {
-    console.error("Error fetching followed artists:", error);
-    throw new Error("Error fetching followed artists");
+    console.error("Error in skipToPrevious", error);
+  }
+}
+
+export async function getAllDevices(
+  accessToken: string
+): Promise<{ devices: Device[] } | null> {
+  try {
+    console.log("feetching devices", accessToken);
+
+    const data = await spotifyFetch<{ devices: Device[] }>(
+      "me/player/devices",
+      accessToken
+    );
+
+    // console.log("Devices", data);
+
+    return data;
+  } catch (err) {
+    console.log("er");
+
+    console.log("Error in getAllDevices", err);
+    return null;
   }
 }
