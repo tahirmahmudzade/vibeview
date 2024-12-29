@@ -27,6 +27,7 @@ export default async function RootLayout({
         <RootLayoutClient
           shouldShowAppShell={shouldShowAppShell}
           user={session?.user}
+          // accessToken={session?.accessToken}
         >
           {children}
         </RootLayoutClient>

@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { Alert, Button } from "@nextui-org/react";
 
-// Define the BeforeInstallPromptEvent interface
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
   userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
@@ -26,7 +25,7 @@ export default function InstallAlertClient() {
       setShowInstallAlert(true);
       const appearTimer = setTimeout(() => {
         setIsVisible(true); // Trigger fade-in after 1 second
-      }, 700);
+      }, 500);
 
       // Auto-hide the alert after 3 seconds (plus the initial delay)
       const hideTimer = setTimeout(() => {
@@ -42,7 +41,6 @@ export default function InstallAlertClient() {
       };
     };
 
-    // Add the event listener with casting
     window.addEventListener(
       "beforeinstallprompt",
       handleBeforeInstallPrompt as EventListener
