@@ -3,7 +3,7 @@
 import { FaPlay, FaStepBackward, FaStepForward } from "react-icons/fa";
 import Image from "next/image";
 import { Device, Track } from "@/types/types";
-import { getCurrentlyPlayingTrack } from "@/lib/spotify";
+// import { getCurrentlyPlayingTrack } from "@/lib/spotify";
 import { useState } from "react";
 
 export default function NowPlayingPlayback({
