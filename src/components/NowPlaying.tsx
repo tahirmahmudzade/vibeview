@@ -1,8 +1,6 @@
 import { getAllDevices, getCurrentlyPlayingTrack } from "@/lib/spotify";
 import { auth } from "@/lib/auth";
 import NowPlayingPlayback from "./NowPlayingPlayback";
-import { Suspense } from "react";
-import SectionSkeleton from "./SectionSkeleton";
 
 export default async function NowPlaying() {
   const session = await auth();
@@ -20,6 +18,7 @@ export default async function NowPlaying() {
   const devices = await getAllDevices(session.accessToken);
 
   const track = currentTrack.item;
+  const actions = currentTrack.actions;
 
   return (
     <div
@@ -47,13 +46,12 @@ export default async function NowPlaying() {
         z-50
       "
     >
-      <Suspense fallback={<SectionSkeleton title="Loading current track..." />}>
-        <NowPlayingPlayback
-          track={track}
-          accessToken={session.accessToken}
-          devicesRes={devices}
-        />
-      </Suspense>
+      <NowPlayingPlayback
+        track={track}
+        actions={actions}
+        accessToken={session.accessToken}
+        devicesRes={devices}
+      />
     </div>
   );
 }

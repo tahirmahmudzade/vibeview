@@ -1,108 +1,117 @@
 "use client";
 
-import { FaPlay, FaStepBackward, FaStepForward } from "react-icons/fa";
+import { FaPause, FaPlay, FaStepBackward, FaStepForward } from "react-icons/fa";
 import Image from "next/image";
-import { Device, Track } from "@/types/types";
-// import { getCurrentlyPlayingTrack } from "@/lib/spotify";
+import { Actions, Device, Track } from "@/types/types";
 import { useState } from "react";
+import {
+  accessCurrentTrack,
+  pauseTrack,
+  resumeTrack,
+  skip,
+} from "@/app/actions/player";
+
+type PlaybackProps = {
+  track: Track;
+  accessToken: string;
+  devicesRes: { devices: Device[] } | null;
+  actions: Actions;
+};
 
 export default function NowPlayingPlayback({
   track,
   accessToken,
   devicesRes,
-}: {
-  track: Track;
-  accessToken: string;
-  devicesRes: { devices: Device[] } | null;
-}) {
-  const [currentTrack, setCurrentTrack] = useState(track);
+  actions,
+}: PlaybackProps) {
+  const [currentTrack, setCurrentTrack] = useState({
+    track,
+    disallows: actions.disallows,
+  });
 
-  const albumImage = currentTrack.album.images[0]?.url;
+  const albumImage = currentTrack.track.album.images[0]?.url;
   const activeDevice = devicesRes?.devices.find((d) => d.is_active);
 
-  async function handleAction(action: "next" | "previous") {
+  async function handleAction(actionType: "next" | "previous") {
     if (!activeDevice) {
       console.error("No active device found");
       return;
     }
 
-    try {
-      const response = await fetch("/api/player/skip", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          accessToken,
-          action,
-          deviceId: activeDevice.id,
-        }),
-      });
+    await skip(accessToken, activeDevice.id, actionType);
 
-      if (!response.ok) {
-        const error = await response.json();
-        console.error("Failed to perform action", error);
-        return;
-      }
+    const updatedTrack = await accessCurrentTrack(accessToken);
 
-      // Wait for Spotify to update playback state
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+    if (updatedTrack?.status === 200 && updatedTrack.track) {
+      setCurrentTrack((prev) => ({
+        ...prev,
+        track: updatedTrack.track,
+        disallows: updatedTrack.disallows,
+      }));
+    }
+  }
 
-      // Fetch currently playing track via the server-side API
-      const trackResponse = await fetch(
-        `/api/player/current?accessToken=${accessToken}`
-      );
+  async function handlePlaybackStatus() {
+    if (!activeDevice) {
+      console.error("No active device found");
+      return;
+    }
 
-      if (!trackResponse.ok) {
-        const error = await trackResponse.json();
-        console.error("Failed to fetch currently playing track", error);
-        return;
-      }
-
-      const newTrack = await trackResponse.json();
-      if (newTrack?.item) {
-        setCurrentTrack(newTrack.item);
-      } else {
-        console.error("No track currently playing");
-      }
-    } catch (error) {
-      console.error("Error performing action", error);
+    if (currentTrack.disallows?.resuming) {
+      await pauseTrack(accessToken, activeDevice.id);
+    } else if (currentTrack.disallows.pausing) {
+      await resumeTrack(accessToken, activeDevice.id);
     }
   }
 
   return (
-    <div>
+    <div className="flex w-full items-center justify-between">
       <div className="flex items-center space-x-4">
         <Image
           src={albumImage}
-          alt={currentTrack.name}
+          alt={currentTrack.track.name}
           width={40}
           height={40}
-          className="rounded-full"
+          className="rounded-md object-cover"
         />
         <div className="flex flex-col">
-          <span className="font-semibold text-[12px] sm:text-sm max-w-[100px] sm:max-w-full truncate">
-            {currentTrack.name}
+          <span className="font-semibold truncate text-[12px] sm:text-xs md:text-sm lg:text-base">
+            {currentTrack.track.name}
           </span>
-          <span className="text-[10px] text-gray-300 truncate sm:text-xs">
-            {currentTrack.artists.map((a) => a.name).join(", ")}
+          <span className="text-[12px] sm:text-xs md:text-sm lg:text-base text-gray-400 truncate">
+            {currentTrack.track.artists.map((a) => a.name).join(", ")}
           </span>
         </div>
       </div>
-      {activeDevice ? (
-        <div className="flex items-center space-x-4">
-          <button onClick={() => handleAction("previous")}>
-            <FaStepBackward className="w-3.5 h-3.5 sm:w-5 sm:h-5" />
+
+      {/* Playback Controls */}
+      {currentTrack.disallows ? (
+        <div className="flex items-center space-x-3">
+          <button
+            onClick={() => handleAction("previous")}
+            className="bg-gray-700 hover:bg-gray-600 rounded-full p-2 transition-all"
+          >
+            <FaStepBackward className="w-2 h-2 sm:w-2.5 sm:h-2.5 md:w-3 md:h-3 lg:w-4 lg:h-4" />
           </button>
-          <button className="bg-white text-gray-800 rounded-full p-2">
-            <FaPlay className="w-3.5 h-3.5 sm:w-5 sm:h-5" />
+          <button
+            onClick={handlePlaybackStatus}
+            className="bg-white text-gray-800 hover:bg-gray-300 rounded-full p-3 transition-all"
+          >
+            {currentTrack.disallows.pausing ? (
+              <FaPlay className="w-2 h-2 sm:w-2.5 sm:h-2.5 md:w-3 md:h-3 lg:w-4 lg:h-4" />
+            ) : (
+              <FaPause className="w-2 h-2 sm:w-2.5 sm:h-2.5 md:w-3 md:h-3 lg:w-4 lg:h-4" />
+            )}
           </button>
-          <button onClick={() => handleAction("next")}>
-            <FaStepForward className="w-3.5 h-3.5 sm:w-5 sm:h-5" />
+          <button
+            onClick={() => handleAction("next")}
+            className="bg-gray-700 hover:bg-gray-600 rounded-full p-2 transition-all"
+          >
+            <FaStepForward className="w-2 h-2 sm:w-2.5 sm:h-2.5 md:w-3 md:h-3 lg:w-4 lg:h-4" />
           </button>
         </div>
       ) : (
-        "No active device"
+        ""
       )}
     </div>
   );
