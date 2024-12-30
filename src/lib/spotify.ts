@@ -149,63 +149,6 @@ export async function getCurrentlyPlayingTrack(
   }
 }
 
-export async function startResumePlayback(
-  accessToken: string,
-  deviceId: string,
-  uris: string[]
-): Promise<void> {
-  try {
-    await spotifyFetch<void>(
-      `me/player/play?device_id=${deviceId}`,
-      accessToken,
-      {
-        method: "PUT",
-        body: JSON.stringify({ uris }),
-      }
-    );
-  } catch (error) {
-    console.error("Error in startResumePlayback", error);
-    throw error;
-  }
-}
-
-export async function skipToNext(
-  accessToken: string,
-  deviceId: string
-): Promise<void> {
-  try {
-    await spotifyFetch<void>(
-      `me/player/next?device_id=${deviceId}`,
-      accessToken,
-      {
-        method: "POST",
-      }
-    );
-  } catch (error) {
-    console.error("Error in skipToNext", error);
-  }
-}
-
-export async function skipToPrevious(
-  accessToken: string,
-  deviceId: string
-): Promise<void> {
-  try {
-    await spotifyFetch<void>(
-      `me/player/previous?device_id=${deviceId}`,
-      accessToken,
-      {
-        method: "POST",
-        headers: {
-          "Access-Control-Allow-Origin": "*", // This is a CORS header
-        },
-      }
-    );
-  } catch (error) {
-    console.error("Error in skipToPrevious", error);
-  }
-}
-
 export async function getAllDevices(
   accessToken: string
 ): Promise<{ devices: Device[] } | null> {
@@ -215,13 +158,52 @@ export async function getAllDevices(
       accessToken
     );
 
-    // console.log("Devices", data);
-
     return data;
   } catch (err) {
-    console.log("er");
-
     console.log("Error in getAllDevices", err);
     return null;
+  }
+}
+
+export async function skipTo(
+  accessToken: string,
+  deviceId: string,
+  actionType: "next" | "previous"
+) {
+  try {
+    const endpoint = `me/player/${actionType}`;
+
+    await spotifyFetch<void>(`${endpoint}?device_id=${deviceId}`, accessToken, {
+      method: "POST",
+    });
+  } catch (error) {
+    console.error(`Error in skipTo ${actionType}`, error);
+    throw error;
+  }
+}
+
+export async function pauseCurrentTrack(accessToken: string, deviceId: string) {
+  try {
+    await spotifyFetch<void>(
+      `me/player/pause?device_id=${deviceId}`,
+      accessToken,
+      { method: "PUT" }
+    );
+  } catch (error) {
+    console.error("Error in pauseCurrentTrack", error);
+    throw error;
+  }
+}
+
+export async function startResumeTrack(accessToken: string, deviceId: string) {
+  try {
+    await spotifyFetch<void>(
+      `me/player/play?device_id=${deviceId}`,
+      accessToken,
+      { method: "PUT" }
+    );
+  } catch (error) {
+    console.error("Error in startResumeTrack", error);
+    throw error;
   }
 }
