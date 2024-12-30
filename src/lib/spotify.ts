@@ -210,8 +210,6 @@ export async function getAllDevices(
   accessToken: string
 ): Promise<{ devices: Device[] } | null> {
   try {
-    console.log("feetching devices", accessToken);
-
     const data = await spotifyFetch<{ devices: Device[] }>(
       "me/player/devices",
       accessToken
