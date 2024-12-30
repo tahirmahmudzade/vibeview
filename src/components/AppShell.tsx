@@ -4,12 +4,8 @@ import { useEffect, useState } from "react";
 import { FaBars } from "react-icons/fa";
 import Sidebar from "@/components/Sidebar";
 import { User } from "next-auth";
-// import CurrentlyPlayingBar from "./CurrentlyPlayingBar";
 
-interface AppShellProps {
-  children: React.ReactNode;
-  user?: User;
-}
+type AppShellProps = { children: React.ReactNode; user?: User };
 
 export default function AppShell({ children, user }: AppShellProps) {
   const [collapsed, setCollapsed] = useState(false);
@@ -17,23 +13,14 @@ export default function AppShell({ children, user }: AppShellProps) {
 
   useEffect(() => {
     if ("serviceWorker" in navigator) {
-      navigator.serviceWorker
-        .register("/sw.js")
-        .then(() => {
-          // console.log(
-          //   "Service Worker registered with scope:",
-          //   registration.scope
-          // );
-        })
-        .catch((error) => {
-          console.error("Service Worker registration failed:", error);
-        });
+      navigator.serviceWorker.register("/sw.js").catch((error) => {
+        console.error("Service Worker registration failed:", error);
+      });
     }
   }, []);
 
   return (
     <div className="flex h-full min-h-screen bg-black">
-      {/* Sidebar */}
       <Sidebar
         collapsed={collapsed}
         setCollapsed={setCollapsed}
@@ -43,7 +30,6 @@ export default function AppShell({ children, user }: AppShellProps) {
       />
 
       <div className="flex-1 flex flex-col">
-        {/* Header (visible only on mobile) */}
         <header
           className="
             flex items-center text-white px-6 py-4 md:hidden
@@ -59,7 +45,6 @@ export default function AppShell({ children, user }: AppShellProps) {
           <h1 className="ml-4 text-lg font-bold tracking-tight">VibeView</h1>
         </header>
 
-        {/* Main Content */}
         <main
           className="
             flex-1 
@@ -71,11 +56,8 @@ export default function AppShell({ children, user }: AppShellProps) {
         >
           {children}
         </main>
-
-        {/* {accessToken ? <CurrentlyPlayingBar accessToken={accessToken} /> : ""} */}
       </div>
 
-      {/* Drawer Overlay (mobile) */}
       {drawerOpen && (
         <div
           className="fixed inset-0 bg-black/60 z-40 md:hidden"

@@ -4,11 +4,11 @@ import { User } from "next-auth";
 import { useEffect } from "react";
 import AppShell from "./AppShell";
 
-interface RootLayoutClientProps {
+type RootLayoutClientProps = {
   shouldShowAppShell: boolean | 0 | null;
   children: React.ReactNode;
   user?: User;
-}
+};
 
 export default function RootLayoutClient({
   shouldShowAppShell,

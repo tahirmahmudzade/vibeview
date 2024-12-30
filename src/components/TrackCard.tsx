@@ -5,10 +5,7 @@ import { Track } from "@/types/types";
 import { Card } from "@nextui-org/react";
 import Image from "next/image";
 
-interface TrackCardProps {
-  track: Track;
-  index: number;
-}
+type TrackCardProps = { track: Track; index: number };
 
 export default function TrackCard({ track, index }: TrackCardProps) {
   return (

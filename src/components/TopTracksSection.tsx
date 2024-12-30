@@ -7,10 +7,7 @@ import TermMenu from "./TermMenu";
 import TrackCard from "./TrackCard";
 import { getUserTopEntities } from "@/lib/spotify";
 
-interface TopTracksClientProps {
-  initialTracks: Track[];
-  accessToken: string;
-}
+type TopTracksClientProps = { initialTracks: Track[]; accessToken: string };
 
 export default function TopTracksSection({
   initialTracks,

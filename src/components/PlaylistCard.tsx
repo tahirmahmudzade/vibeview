@@ -4,10 +4,7 @@ import { Playlist } from "@/types/types";
 import { Card } from "@nextui-org/react";
 import Image from "next/image";
 
-interface PlaylistCardProps {
-  playlist: Playlist;
-  index: number;
-}
+type PlaylistCardProps = { playlist: Playlist; index: number };
 
 export default function PlaylistCard({ playlist, index }: PlaylistCardProps) {
   return (

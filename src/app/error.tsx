@@ -3,10 +3,7 @@
 import { useEffect } from "react";
 import { motion } from "framer-motion";
 
-interface ErrorProps {
-  error: Error & { digest?: string };
-  reset: () => void;
-}
+type ErrorProps = { error: Error & { digest?: string }; reset: () => void };
 
 export default function Error({ error, reset }: ErrorProps) {
   useEffect(() => {

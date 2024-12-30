@@ -11,13 +11,13 @@ import { BiChevronLeft } from "react-icons/bi";
 import { logout } from "@/app/actions/auth";
 import { User } from "next-auth";
 
-interface SidebarProps {
+type SidebarProps = {
   collapsed: boolean;
   setCollapsed: (val: boolean) => void;
   isDrawerOpen: boolean;
   closeDrawer: () => void;
   user?: User;
-}
+};
 
 export default function Sidebar({
   collapsed,

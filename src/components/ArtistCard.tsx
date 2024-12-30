@@ -4,10 +4,7 @@ import { DetailedArtist } from "@/types/types";
 import { Card } from "@nextui-org/react";
 import Image from "next/image";
 
-interface ArtistCardProps {
-  artist: DetailedArtist;
-  index: number;
-}
+type ArtistCardProps = { artist: DetailedArtist; index: number };
 
 export default function ArtistCard({ artist, index }: ArtistCardProps) {
   return (

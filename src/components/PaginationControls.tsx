@@ -1,10 +1,10 @@
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
-interface PaginationControlsProps {
+type PaginationControlsProps = {
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
-}
+};
 
 export default function PaginationControls({
   currentPage,

@@ -5,9 +5,7 @@ import { Playlist } from "@/types/types";
 import PaginationControls from "@/components/PaginationControls";
 import PlaylistCard from "./PlaylistCard";
 
-interface PlaylistsSectionProps {
-  playlists: Playlist[];
-}
+type PlaylistsSectionProps = { playlists: Playlist[] };
 
 export default function PlaylistsSection({ playlists }: PlaylistsSectionProps) {
   const [currentPage, setCurrentPage] = useState(1);

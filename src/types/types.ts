@@ -1,8 +1,4 @@
-type Image = {
-  height: number;
-  url: string;
-  width: number;
-};
+type Image = { height: number; url: string; width: number };
 
 export type Artist = Omit<
   DetailedArtist,

@@ -3,10 +3,7 @@
 import { Terms } from "@/types/types";
 import { Select, SelectItem } from "@nextui-org/react";
 
-interface TermMenuProps {
-  handleTermChange: (term: Terms) => void;
-  term: Terms;
-}
+type TermMenuProps = { handleTermChange: (term: Terms) => void; term: Terms };
 
 export default function TermMenu({ handleTermChange, term }: TermMenuProps) {
   return (

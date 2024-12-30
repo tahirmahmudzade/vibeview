@@ -7,10 +7,10 @@ import ArtistCard from "./ArtistCard";
 import TermMenu from "./TermMenu";
 import { getUserTopEntities } from "@/lib/spotify";
 
-interface TopArtistsClientProps {
+type TopArtistsClientProps = {
   initialArtists: DetailedArtist[];
   accessToken: string;
-}
+};
 
 export default function TopArtistsSection({
   initialArtists,

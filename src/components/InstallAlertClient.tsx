@@ -3,10 +3,10 @@
 import { useEffect, useState } from "react";
 import { Alert, Button } from "@nextui-org/react";
 
-interface BeforeInstallPromptEvent extends Event {
+type BeforeInstallPromptEvent = Event & {
   prompt: () => Promise<void>;
   userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
-}
+};
 
 export default function InstallAlertClient() {
   const [deferredPrompt, setDeferredPrompt] =

@@ -5,10 +5,7 @@ import { Card } from "@nextui-org/react";
 import Image from "next/image";
 import { formatMilliseconds } from "@/lib/utils";
 
-interface HorizontalTracksProps {
-  title: string;
-  tracks: { track: Track }[];
-}
+type HorizontalTracksProps = { title: string; tracks: { track: Track }[] };
 
 export default function HorizontalTracksSection({
   title,

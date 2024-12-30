@@ -6,11 +6,11 @@ import { getUserTopEntities } from "@/lib/spotify";
 import HorizontalArtistRow from "./HorizontalArtistRow";
 import { Spacer } from "@nextui-org/react";
 
-interface ArtistsPageClientProps {
+type ArtistsPageClientProps = {
   initialTopArtists: DetailedArtist[];
   followedArtists: DetailedArtist[];
   accessToken: string;
-}
+};
 
 export default function ArtistsPageClient({
   initialTopArtists,

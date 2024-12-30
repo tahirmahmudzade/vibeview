@@ -4,13 +4,13 @@ import { DetailedArtist, Terms } from "@/types/types";
 import NewArtistCard from "./NewArtistCard";
 import TermMenu from "@/components/TermMenu";
 
-interface HorizontalArtistRowProps {
+type HorizontalArtistRowProps = {
   title: string;
   artists: DetailedArtist[];
   isTopArtists?: boolean;
   term?: Terms;
   handleTermChange?: (newTerm: Terms) => void;
-}
+};
 
 export default function HorizontalArtistRow({
   title,
