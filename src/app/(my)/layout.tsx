@@ -1,4 +1,6 @@
-// import NowPlaying from "@/components/NowPlaying";
+import NowPlaying from "@/components/NowPlaying";
+import SectionSkeleton from "@/components/SectionSkeleton";
+import { Suspense } from "react";
 
 export default async function Layout({
   children,
@@ -8,7 +10,9 @@ export default async function Layout({
   return (
     <div>
       {children}
-      {/* <NowPlaying /> */}
+      <Suspense fallback={<SectionSkeleton title="Loading current track..." />}>
+        <NowPlaying />
+      </Suspense>
     </div>
   );
 }
