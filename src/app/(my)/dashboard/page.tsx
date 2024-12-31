@@ -6,10 +6,11 @@ import TopTracks from "@/components/TopTracks";
 import TopArtists from "@/components/TopArtists";
 import Playlists from "@/components/Playlists";
 import ProfileSkeleton from "@/components/ProfileSkeletion";
+import TopGenres from "@/components/TopGenres";
+import Albums from "@/components/Albums";
 
 export default async function Dashboard() {
   const session = await auth();
-
   if (!session) throw new Error("No session found");
 
   const { accessToken } = session;
@@ -19,15 +20,25 @@ export default async function Dashboard() {
       <Suspense fallback={<ProfileSkeleton />}>
         <Profile accessToken={accessToken} />
       </Suspense>
+
       <Suspense fallback={<SectionSkeleton title="Top Tracks" />}>
         <TopTracks accessToken={accessToken} />
       </Suspense>
+
+      <Suspense fallback={<SectionSkeleton title="Top Genres" />}>
+        <TopGenres accessToken={accessToken} />
+      </Suspense>
+
       <Suspense fallback={<SectionSkeleton title="Top Artists" />}>
         <TopArtists accessToken={accessToken} />
       </Suspense>
 
       <Suspense fallback={<SectionSkeleton title="Public Playlists" />}>
         <Playlists accessToken={accessToken} />
+      </Suspense>
+
+      <Suspense fallback={<SectionSkeleton title="Public Albums" />}>
+        <Albums accessToken={accessToken} />
       </Suspense>
     </div>
   );
