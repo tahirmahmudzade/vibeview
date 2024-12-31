@@ -29,6 +29,8 @@ export default function NowPlayingPlayback({
     disallows: actions.disallows,
   });
 
+  const [isPlaying, setIsPlaying] = useState(currentTrack.disallows.resuming);
+
   const albumImage = currentTrack.track.album.images[0]?.url;
   const activeDevice = devicesRes?.devices.find((d) => d.is_active);
 
@@ -48,6 +50,8 @@ export default function NowPlayingPlayback({
         track: updatedTrack.track,
         disallows: updatedTrack.disallows,
       }));
+
+      setIsPlaying(updatedTrack.disallows.resuming);
     }
   }
 
@@ -57,10 +61,14 @@ export default function NowPlayingPlayback({
       return;
     }
 
-    if (currentTrack.disallows?.resuming) {
+    if (isPlaying) {
       await pauseTrack(accessToken, activeDevice.id);
-    } else if (currentTrack.disallows.pausing) {
+
+      setIsPlaying(false);
+    } else {
       await resumeTrack(accessToken, activeDevice.id);
+
+      setIsPlaying(true);
     }
   }
 
@@ -97,10 +105,10 @@ export default function NowPlayingPlayback({
             onClick={handlePlaybackStatus}
             className="bg-white text-gray-800 hover:bg-gray-300 rounded-full p-3 transition-all"
           >
-            {currentTrack.disallows.pausing ? (
-              <FaPlay className="w-2 h-2 sm:w-2.5 sm:h-2.5 md:w-3 md:h-3 lg:w-4 lg:h-4" />
-            ) : (
+            {isPlaying ? (
               <FaPause className="w-2 h-2 sm:w-2.5 sm:h-2.5 md:w-3 md:h-3 lg:w-4 lg:h-4" />
+            ) : (
+              <FaPlay className="w-2 h-2 sm:w-2.5 sm:h-2.5 md:w-3 md:h-3 lg:w-4 lg:h-4" />
             )}
           </button>
           <button
