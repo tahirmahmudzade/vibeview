@@ -33,7 +33,7 @@ export default function TopTracksSection({
   }
 
   return (
-    <div>
+    <>
       <div className="flex items-center mb-4 whitespace-nowrap">
         <h2 className="text-xl font-semibold tracking-tight">Top Tracks</h2>
         <TermMenu handleTermChange={handleTermChange} term={term} />
@@ -62,6 +62,6 @@ export default function TopTracksSection({
         totalPages={Math.ceil(tracks.length / itemsPerPage)}
         onPageChange={setCurrentPage}
       />
-    </div>
+    </>
   );
 }
