@@ -4,6 +4,10 @@ VibeView is a Progressive Web Application (PWA) built with Next.js that allows S
 
 ---
 
+## ⚠️ Important:
+
+Spotify currently limits access to 25 users, and you’ll need to be whitelisted to use the app. Please contact me if you’d like to try it out! Without whitelisting, the app will throw an error after authentication.
+
 ## Features ✨
 
 ### 🎧 Spotify Stats
