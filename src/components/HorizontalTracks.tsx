@@ -18,10 +18,7 @@ export default async function HorizontalTracks({
         />
       </div>
       <div className="grid grid-cols-1">
-        <HorizontalTracksSection
-          title="Recently Played Tracks"
-          tracks={savedTracks}
-        />
+        <HorizontalTracksSection title="Saved Tracks" tracks={savedTracks} />
       </div>
     </>
   );
